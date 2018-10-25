@@ -2,12 +2,12 @@
 #include <string.h>
 
 int main(){
-  char query[40];
+  char query[40], tableQuery[100];
   char databaseName[15];
 
   FILE *fp ;
   int i = 0,j, id;
-  char dbName,folderName[18];
+  char dbName,folderName[18] = {'d','b','/'};
 
   printf("Enter your query to view, create or select databases: \n");
   fgets(query, 40, stdin);
@@ -27,9 +27,6 @@ int main(){
     }
     case 'C':{
       printf("Create sequence initiated \n");
-      folderName[0] = 'd';
-      folderName[1] = 'b';
-      folderName[2] = '/';
       j = 3;
       fp = fopen("db/database.txt", "a");
       for(i = 7; i <= strlen(query); i++){
@@ -44,7 +41,19 @@ int main(){
     }
     case 'S':{
       printf("SELECT sequence initiated \n");
-
+      printf("Enter your query to Create, Insert or Delete a table: \n");
+      fgets(tableQuery, 100, stdin);
+      switch(tableQuery[0]){
+        case 'C':{
+          printf("Table Create sequence initiated \n");
+          // fp = fopen("");
+          break;
+        }
+        case 'U':{
+          printf("Table Update sequence initiated \n");          
+          break;
+        }
+      }
       break;
     }
     default: {

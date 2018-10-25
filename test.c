@@ -1,23 +1,21 @@
-#include<stdio.h>
-#include<stdarg.h> 
+#include <stdio.h>
 
-int stringPrint(char string[5], ...) 
+#include <string.h>
+
+int main ()
 {
-    va_list valist; 
-  
-    int i,j; 
-  
-    va_start(valist, string);
-    while(string){
-        puts(string);
-        string = va_arg(valist, char *);
+    char buf[] ="Name varcahar,RollNo int";
+	const char s1[25] = "' ',','";	
+	int i = 0,j = 0;
+    char *p1 = strtok (buf, s1);
+    char *array1[10];
+    while (p1 != NULL)
+    {
+        array1[i++] = p1;
+        p1 = strtok (NULL, s1);
+        j++;
     }
-    va_end(valist); 
-    return 0; 
-}
-
-int main() 
-{
-    stringPrint("Aditya", "hello", "Anmol", "create"); 
-    return 0; 
+    for (i = 0; i < j; ++i)  
+        printf("%s\n", array1[i]);
+    return 0;
 }
