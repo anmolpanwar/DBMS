@@ -4,11 +4,12 @@
 
 int main ()
 {
-    char buf[] ="Name varcahar,RollNo int";
-	const char s1[25] = "' ',','";	
+    char buf[] ="Name varchar,RollNo int";
+	const char s1[10] = "' ',','";	
 	int i = 0,j = 0;
     char *p1 = strtok (buf, s1);
     char *array1[10];
+    
     while (p1 != NULL)
     {
         array1[i++] = p1;

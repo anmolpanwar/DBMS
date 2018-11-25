@@ -42,22 +42,6 @@ View, Select, Delete all have different first letters. So we can filter them bas
     `Syntax: Select <db-name> (or) SELECT <db-name>`
 
     The entered query should be parsed again to execute the required command on the selected database.
-
-## Parsing the query to CREATE, SELECT, INSERT, UPDATE, DELETE a table. 
-
--   Parse this kind of query to dynamically allocate memory 
-    ```c
-    CREATE TABLE `auction` (
-    `ID` int(11) NOT NULL,
-    `Name` varchar(30) NOT NULL,
-    `base-price` int(11) NOT NULL,
-    `category` varchar(20) NOT NULL
-    )
-    ```
-    Create the folder inside the respective database with the name of the table. 
-
-    ~~Create a `values.txt` file inside each table which contains table names in the first row and values in the corresponding rows.~~
-
 ### (...) Operator
 Variable length arguments can be passed using the triple dot operator in C.
 ```c
@@ -164,3 +148,50 @@ After dividing the entered query into subparts using the dilimiter, we call a fu
   '                |-- values.txt',
 ]
 ```
+-- Minor presentation done -- 
+#### Scope of the project: 
+
+- Being able to have it centralised in a way so that multiple users can access it at the same time. 
+- Implementing Cloud instance once the above step is done.
+- Have options to perform multiple nested queries in a single command.
+
+## Parsing the query to CREATE, SELECT, INSERT, UPDATE, DELETE a table. 
+
+-   Parse this kind of query to ~~dynamically allocate memory~~ create the respective columns in columns.txt after creating the `<table-name>` folder.
+    ```c
+    CREATE TABLE `auction` (
+    `ID` int(11) NOT NULL,
+    `Name` varchar(30) NOT NULL,
+    `base-price` int(11) NOT NULL,
+    `category` varchar(20) NOT NULL
+    )
+    ```
+    Create the folder inside the respective database with the name of the table. 
+
+    ~~Create a `values.txt` file inside each table which contains table names in the first row and values in the corresponding rows.~~
+
+    ```c
+    #include <stdio.h>
+    #include <string.h>
+
+    int main ()
+    {
+        char buf[] ="Name varchar,RollNo int";
+        const char s1[25] = "' ',','";
+        int i = 0,j = 0;
+        char *p1 = strtok (buf, s1);
+        char *array1[10];
+
+        
+        while (p1 != NULL)
+        {
+            array1[i++] = p1;
+            p1 = strtok (NULL, s1);
+            j++;
+        }
+        for (i = 0; i < j; ++i)  
+            printf("%s\n", array1[i]);
+        return 0;
+    }
+    ```
+    With the restriction that every table should have only 2 attributes, we can divide after every 2 words after the initial 3 words. 
