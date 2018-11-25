@@ -195,3 +195,24 @@ After dividing the entered query into subparts using the dilimiter, we call a fu
     }
     ```
     With the restriction that every table should have only 2 attributes, we can divide after every 2 words after the initial 3 words. 
+
+When we select a database, we need to check if a folder with the same name as the database exists. 
+```c
+#include <dirent.h>
+#include <errno.h>
+
+DIR* dir = opendir("mydir");
+if (dir)
+{
+    /* Directory exists. */
+    closedir(dir);
+}
+else if (ENOENT == errno)
+{
+    /* Directory does not exist. */
+}
+else
+{
+    /* opendir() failed for some other reason. */
+}
+```

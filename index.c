@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <dirent.h>
+#include <errno.h>
+
 int main()
 {
   char query[40], tableQuery[100];
@@ -11,7 +14,7 @@ int main()
   char dbName, folderName[18] = {'d', 'b', '/'};
   const char delimiters[10] = "' ',','";
   char *p1;
-  char *createCommand[40];
+  char *createParsed[10];
 
   printf("Enter your query to view, create or select databases: \n");
   fgets(query, 40, stdin);
@@ -58,8 +61,14 @@ int main()
     case 'C':
     {
       printf("Table Create sequence initiated \n");
-      *p1 = strtok(tableQuery, delimiters);
-
+      p1 = strtok(tableQuery, delimiters);
+      while (p1 != NULL)
+      {
+        createParsed[i++] = p1;
+        p1 = strtok(NULL, delimiters);
+        j++;
+      }
+      printf("%s\n", createParsed[2]); //table-name
       break;
     }
     case 'U':

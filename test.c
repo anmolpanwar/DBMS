@@ -1,22 +1,24 @@
 #include <stdio.h>
+#include <dirent.h>
+#include <errno.h>
 
-#include <string.h>
-
-int main ()
+int main()
 {
-    char buf[] ="Name varchar,RollNo int";
-	const char s1[10] = "' ',','";	
-	int i = 0,j = 0;
-    char *p1 = strtok (buf, s1);
-    char *array1[10];
-    
-    while (p1 != NULL)
+    DIR *dir = opendir("db/munjal");
+    if (dir)
     {
-        array1[i++] = p1;
-        p1 = strtok (NULL, s1);
-        j++;
+        /* Directory exists. */
+        printf("Directory exists");
+        closedir(dir);
     }
-    for (i = 0; i < j; ++i)  
-        printf("%s\n", array1[i]);
-    return 0;
+    else if (ENOENT == errno)
+    {
+        printf("can not find the folder");
+        /* Directory does not exist. */
+    }
+    else
+    {
+        printf("error with the file");
+        /* opendir() failed for some other reason. */
+    }
 }
