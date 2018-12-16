@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <dirent.h>
+#include <dirent.h> //to check if a directory exists.
 #include <errno.h>
 
 int main()
@@ -11,10 +11,10 @@ int main()
 
   FILE *fp;
   int i = 0, j, id;
-  char dbName, folderName[18] = {'d', 'b', '/'};
+  char dbName, folderName[18], path[30] = "db/";
   const char delimiters[10] = "' ',','";
   char *p1;
-  char *createParsed[10];
+  char *createParsed[8];
 
   printf("Enter your query to view, create or select databases: \n");
   fgets(query, 40, stdin);
@@ -38,7 +38,7 @@ int main()
   case 'C':
   {
     printf("Create sequence initiated \n");
-    j = 3;
+    j = 0;
     fp = fopen("db/database.txt", "a");
     for (i = 7; i <= strlen(query); i++)
     {
@@ -47,13 +47,40 @@ int main()
       j++;
     }
     printf("%s", folderName);
-    mkdir(folderName);
+    strcat(path, folderName);
+    mkdir(path);
     fclose(fp);
     break;
   }
   case 'S':
   {
     printf("SELECT sequence initiated \n");
+    j = 0;
+    for (i = 7; i <= strlen(query); i++)
+    {
+      databaseName[j] = query[i];
+      j++;
+    }
+    strcat(path, databaseName);
+    printf("%s", path);
+    DIR *dir = opendir(path);
+    if (dir)
+    {
+      /* Directory exists. */
+      printf("Directory exists\n");
+      closedir(dir);
+    }
+    else if (ENOENT == errno)
+    {
+      printf("can not find the folder\n");
+      /* Directory does not exist. */
+    }
+    else
+    {
+      printf("error with the file\n");
+
+      /* opendir() failed for some other reason. */
+    }
     printf("Enter your query to Create, Insert or Delete a table: \n");
     fgets(tableQuery, 100, stdin);
     switch (tableQuery[0])
@@ -66,9 +93,19 @@ int main()
       {
         createParsed[i++] = p1;
         p1 = strtok(NULL, delimiters);
-        j++;
       }
       printf("%s\n", createParsed[2]); //table-name
+      // strcat(path, createParsed[2]);
+      // printf("%s", path);
+      // strcat(path, "tables.txt");
+      // fp = fopen(path, "a");
+      // for (i = 7; i <= strlen(query); i++)
+      // {
+      //   fprintf(fp, "%c", query[i]);
+      //   folderName[j] = query[i];
+      //   j++;
+      // }
+
       break;
     }
     case 'U':

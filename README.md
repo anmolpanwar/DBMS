@@ -1,13 +1,15 @@
 # Algorithm
 Steps to take care of: 
 
-- Parse the input
+- [Parse the input](#tokenization)
 - Filter the input for SELECT, UPDATE, DELETE
 - Make logic to Create a Database
 - SELECT a Database
+    * [Check if the folder exists](#directory-check)
+- [Overview of the file structure](#file-structure)
 - Creating a Table
-  * Limitations of cloumns
-  * Limitations of data types
+  * Limitations of cloumns - 2
+  * Limitations of data types - (int or varchar)
   * Primary Keys and Foreign Keys
 - UPDATE a table 
   * Searching for the entry
@@ -136,6 +138,7 @@ Bird
 ### CREATE command on a database
 After dividing the entered query into subparts using the dilimiter, we call a function which creates the folders on table names and enters the information into their respective `values.txt`.
 
+### File Structure
 ```bash
 [ 
   '|-- db',
@@ -196,6 +199,7 @@ After dividing the entered query into subparts using the dilimiter, we call a fu
     ```
     With the restriction that every table should have only 2 attributes, we can divide after every 2 words after the initial 3 words. 
 
+## Directory Check
 When we select a database, we need to check if a folder with the same name as the database exists. 
 ```c
 #include <dirent.h>
