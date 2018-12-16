@@ -6,7 +6,7 @@
 
 int main()
 {
-  char query[40], tableQuery[100], copyQuery[40], copyTableQuery[100];
+  char query[40], tableQuery[100], path[30] = "db/";
   char databaseName[15];
 
   FILE *fp;
@@ -19,14 +19,13 @@ int main()
   printf("Enter your query to view, create or select databases: \n");
   fgets(query, 40, stdin);
 
-  
   p1 = strtok(query, delimiters);
   while (p1 != NULL)
   {
     databaseParsed[i++] = p1;
     p1 = strtok(NULL, delimiters);
   }
-  printf("%s\n", databaseParsed[1]); //database-name
+  printf("%s", databaseParsed[1]); //database-name
 
   // Database creation or selection
   switch (query[0])
@@ -79,6 +78,12 @@ int main()
         p2 = strtok(NULL, delimiters);
       }
       printf("%s\n", createParsed[2]); //table-name
+
+      strcat(path, databaseParsed[1]);
+      strcat(path, "tables.txt");
+      printf("%s", path);
+      fp = fopen(path, "a");
+
 
       break;
     }
