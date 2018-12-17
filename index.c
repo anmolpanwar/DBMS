@@ -7,15 +7,15 @@
 int main()
 {
   char query[40], tableQuery[100], path[30] = "db/";
-  char databaseName[15];
+  char databaseName[15], tableName[15];
 
   FILE *fp;
-  int i = 0, j, id;
+  int i = 0, counter = 0, id, n, k = 0;
   char dbName, folderName[18] = {'d', 'b', '/'};
   const char delimiters[10] = "' ',','";
   char *p1, *p2;
   char *createParsed[10], *databaseParsed[5];
-  char trash1[30], trash2[30];
+  char trash1[30], trash2[30], trash3[30];
 
   printf("Enter your query to view, create or select databases: \n");
   fgets(query, 40, stdin);
@@ -31,6 +31,7 @@ int main()
   {
     databaseName[i] = databaseParsed[1][i];
   }
+  strcat(path, databaseName);
 
   // Database creation or selection
   switch (query[0])
@@ -51,16 +52,12 @@ int main()
   case 'C':
   {
     printf("Create sequence initiated \n");
-    j = 3;
     fp = fopen("db/database.txt", "a");
-    // for (i = 7; i <= strlen(query); i++)
-    // {
     fprintf(fp, "%s", databaseParsed[1]);
-    //   folderName[j] = query[i];
-    //   j++;
-    // }
-    strcat(folderName, databaseParsed[2]);
+    strcat(folderName, databaseParsed[1]);
     printf("%s", folderName);
+    mkdir(folderName);
+    strcat(folderName, "/values");
     mkdir(folderName);
     fclose(fp);
     break;
@@ -68,45 +65,92 @@ int main()
   case 'S':
   {
     printf("SELECT sequence initiated \n");
+    DIR *dir = opendir(path);
+    if (dir)
+    {
+      /* Directory exists. */
+      printf("Directory exists\n");
+      closedir(dir);
+    }
+    else if (ENOENT == errno)
+    {
+      printf("can not find the folder\n");
+      /* Directory does not exist. */
+      return 0;
+    }
+    else
+    {
+      printf("error with the file\n");
+      return 0;
+      /* opendir() failed for some other reason. */
+    }
     printf("Enter your query to Create, Insert or Delete a table: \n");
     fgets(tableQuery, 100, stdin);
+    p2 = strtok(tableQuery, delimiters);
+    i = 0;
+    while (p2 != NULL)
+    {
+      createParsed[i++] = p2;
+      p2 = strtok(NULL, delimiters);
+      counter++;
+    }
+    for (i = 0; i < (strlen(createParsed[2])); i++)
+    {
+      tableName[i] = createParsed[2][i];
+    }
     switch (tableQuery[0])
     {
     case 'C':
     {
       printf("Table Create sequence initiated \n");
-      p2 = strtok(tableQuery, delimiters);
-      i = 0;
-      while (p2 != NULL)
-      {
-        createParsed[i++] = p2;
-        p2 = strtok(NULL, delimiters);
-      }
       printf("%s\n", createParsed[2]); //table-name
-      strcat(path, databaseName);
       for (i = 0; i < strlen(path); i++)
       {
         trash1[i] = path[i];
       }
       strcat(trash1, "/tables.txt");
-      printf("%s", trash1);
       fp = fopen(trash1, "a");
       fprintf(fp, "%s", createParsed[2]);
-
       for (i = 0; i < strlen(path); i++)
       {
         trash2[i] = path[i];
       }
       strcat(trash2, "/columns.txt");
-      printf("%s", trash2);
       fp = fopen(trash2, "a");
-      fprintf(fp, "%s %s", createParsed[2], createParsed[3]);
-
+      fprintf(fp, "%s %s", tableName, createParsed[3]);
+      strcat(path, "/values/");
+      strcat(trash3, tableName);
+      strcat(trash3, "_");
+      strcat(trash3, createParsed[3]);
+      strcat(trash3, ".txt");
+      printf("%s", trash3);
+      fp = fopen(trash3, "a");
+      fclose(fp);
       break;
     }
-    case 'U':
+    case 'I':
     {
-      printf("Table Update sequence initiated \n");
+      printf("Table Insert sequence initiated \n");
+      printf("%s", path);
+      for (i = 0; i < strlen(path); i++)
+      {
+        trash1[i] = path[i];
+      }
+      strcat(trash1, "/values/");
+      strcat(trash1, tableName);
+      strcat(trash1, "_");
+      strcat(trash1, createParsed[3]);
+      strcat(trash1, ".txt");
+      fp = fopen(trash1, "a");
+
+      // fprintf(fp, "%s", createParsed[4]);
+      n = (counter - 4) / 2;
+      for (i = 3; i < n + 3; i++)
+      {
+        k++;
+        printf("Insert value %d into %d column", n + 4 + k, 4 + k);
+      }
+      fclose(fp);
       break;
     }
     }
@@ -117,8 +161,6 @@ int main()
     printf("Invalid Command");
   }
   }
-
-  // UPDATE, SELECT, DELETE, INSERT, MODIFY, LIMIT, OFFSET
 
   return 0;
 }
