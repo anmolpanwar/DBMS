@@ -97,7 +97,7 @@ int main()
 }
 ```
 #### Tokenization 
-Dividing the string based on a delimiter. 
+Dividing the string based on a delimiter using strtok function. 
 ```c
 #include<string.h>
 
